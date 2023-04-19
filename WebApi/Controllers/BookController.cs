@@ -17,14 +17,14 @@ namespace WebApi.Controllers
             _context = context;
         }
 
-
+        //Bütün kitapların listelerini almak için
         [HttpGet]
         public IActionResult getAllBooks()
         {
             var books = _context.Books.ToList();
             return Ok(books);
         }
-
+        //Tek bir kitabin bilgileri almak için
         [HttpGet("{id:int}")]
         public IActionResult getBookByID([FromRoute(Name ="id")] int id)
         {
@@ -37,22 +37,22 @@ namespace WebApi.Controllers
                 return Ok(book);    
         }
 
-
+        //Tek bir kitabin veri tabanına eklenmesi için
         [HttpPost] 
         public IActionResult CreateOneBook([FromBody] Book gelenbook)
         {
             try
             {
-                if (gelenbook is null) return BadRequest();
+                if (gelenbook is null) return BadRequest(); //400
 
                 _context.Books.Add(gelenbook);
                 _context.SaveChanges();
-                return StatusCode(201, gelenbook);
+                return StatusCode(201, gelenbook); //ekleme başarılı
                 
             }
-            catch
+            catch(Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message); //Hata mesajını döndürüyoruz.
             }
         }
 
