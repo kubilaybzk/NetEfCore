@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WebApi.Models;
+using Entities.Models;
 
 namespace WebApplication1.Repositories.Config
 {
