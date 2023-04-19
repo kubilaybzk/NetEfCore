@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApi.Models;
 using WebApi.Repositories;
 
@@ -55,6 +56,56 @@ namespace WebApi.Controllers
                 return BadRequest(ex.Message); //Hata mesajını döndürüyoruz.
             }
         }
+
+        [HttpPut("{id:int}")]
+        public IActionResult EditOneBook([FromRoute(Name = "id")] int id, [FromBody] Book gelenbook)
+        {
+            try
+            {
+                var editedbook = _context.Books.Where(b => b.Id.Equals(id)).SingleOrDefault();
+
+                if (editedbook is null) return BadRequest();
+                if (id != gelenbook.Id) return BadRequest();
+
+
+                editedbook.Id = gelenbook.Id;
+                editedbook.Price = gelenbook.Price;
+                editedbook.Title = gelenbook.Title;
+                _context.SaveChanges();
+                return StatusCode(201, editedbook);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message); //Hata mesajını döndürüyoruz.
+            }
+        }
+
+
+        [HttpDelete("{id:int}")]
+        public IActionResult DeleteAllBook([FromRoute(Name ="id")] int id)
+        {
+            try
+            {
+                var deletedvalue = _context.Books.Where(b => b.Id.Equals(id)).SingleOrDefault();
+                if(deletedvalue is null) return NotFound();
+                _context.Books.Remove(deletedvalue);
+                _context.SaveChanges();
+                return NoContent();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message); //Hata mesajını döndürüyoruz.
+            }
+        }
+
+
+
 
     }
 }
